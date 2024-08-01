@@ -8,6 +8,7 @@ import "./style.scss";
 import UVIndex from "./uv-index";
 import WindStatus from "./wind-status";
 import SunriseSunset from "./sunrise-sunset";
+import Humidity from "./humidity";
 
 export default function TodayHighlight() {
   return (
@@ -17,10 +18,7 @@ export default function TodayHighlight() {
         <WindStatus />
         <UVIndex />
         <SunriseSunset />
-        <CardSm>
-          <div>Humidity</div>
-          {data.timelines.daily[0].values.humidityMax}
-        </CardSm>
+        <Humidity />
         <CardSm>
           <div>Visibility</div>
           {data.timelines.daily[0].values.visibilityMax}
