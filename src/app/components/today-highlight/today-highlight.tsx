@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import "./style.scss";
 import { subArcData } from "@/app/models/gauge";
 import UVIndex from "./uv-index";
+import WindStatus from "./wind-status";
 
 const GaugeComponent = dynamic(() => import("react-gauge-component"), {
   ssr: false,
@@ -18,10 +19,7 @@ export default function TodayHighlight() {
     <main className="bg-[#2a2c30] rounded-2xl p-8">
       <h1>Today&apos;s Highlight</h1>
       <div className="mt-4 grid grid-cols-3 gap-4">
-        <Card>
-          <div>Wind Status</div>
-          {data.timelines.daily[0].values.windSpeedMax}
-        </Card>
+        <WindStatus />
         <UVIndex />
         <Card>
           <div>Sunrise & Sunset</div>
