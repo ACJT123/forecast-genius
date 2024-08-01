@@ -12,7 +12,7 @@ const uData = data.timelines.hourly
 export default function WindStatusChart() {
   return (
     <ChartContainer
-      width={550}
+      width={350}
       height={200}
       colors={["#28b6f5"]}
       series={[{ data: uData, label: "uv", type: "bar" }]}

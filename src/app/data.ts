@@ -6184,3 +6184,37 @@ export const data = {
     lon: -71.0466,
   },
 };
+
+export const weatherData = {
+  data: {
+    time: "2024-08-01T10:20:00Z",
+    values: {
+      cloudBase: null,
+      cloudCeiling: null,
+      cloudCover: 0,
+      dewPoint: 20.63,
+      freezingRainIntensity: 0,
+      humidity: 93,
+      precipitationProbability: 0,
+      pressureSurfaceLevel: 1003.83,
+      rainIntensity: 0,
+      sleetIntensity: 0,
+      snowIntensity: 0,
+      temperature: 21.69,
+      temperatureApparent: 21.69,
+      uvHealthConcern: 0,
+      uvIndex: 0,
+      visibility: 14.47,
+      weatherCode: 1000,
+      windDirection: 326.81,
+      windGust: 2.38,
+      windSpeed: 1,
+    },
+  },
+  location: {
+    lat: 43.653480529785156,
+    lon: -79.3839340209961,
+    name: "Toronto, Golden Horseshoe, Ontario, Canada",
+    type: "administrative",
+  },
+};
