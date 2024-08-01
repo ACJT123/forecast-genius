@@ -1,7 +1,17 @@
 // uv index component
 .uv-index {
-.value-text {
-  text {
-    @apply hidden;
+  .value-text {
+    text {
+      @apply hidden;
+    }
   }
+}
+
+// sunset sunrise component
+.sunrise-sunset {
+  .pointer {
+    @apply -mt-3
+    // @apply hidden;
+  }
+  
 }

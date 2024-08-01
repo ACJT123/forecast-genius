@@ -7,6 +7,7 @@ import CardSm from "./card-sm";
 import "./style.scss";
 import UVIndex from "./uv-index";
 import WindStatus from "./wind-status";
+import SunriseSunset from "./sunrise-sunset";
 
 export default function TodayHighlight() {
   return (
@@ -15,11 +16,7 @@ export default function TodayHighlight() {
       <div className="mt-4 grid grid-cols-3 gap-4">
         <WindStatus />
         <UVIndex />
-        <Card>
-          <div>Sunrise & Sunset</div>
-          {data.timelines.daily[0].values.sunriseTime}
-          {data.timelines.daily[0].values.sunsetTime}
-        </Card>
+        <SunriseSunset />
         <CardSm>
           <div>Humidity</div>
           {data.timelines.daily[0].values.humidityMax}
