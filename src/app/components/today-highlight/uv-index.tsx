@@ -8,6 +8,7 @@ export default function UVIndex() {
     <Card>
       <div>UV Index</div>
       <GaugeComponent
+      className="uv-index"
         arc={{
           gradient: true,
           padding: 0.01,
