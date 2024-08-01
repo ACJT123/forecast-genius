@@ -4,15 +4,9 @@ import { data } from "@/app/data";
 import Image from "next/image";
 import Card from "./card";
 import CardSm from "./card-sm";
-import dynamic from "next/dynamic";
 import "./style.scss";
-import { subArcData } from "@/app/models/gauge";
 import UVIndex from "./uv-index";
 import WindStatus from "./wind-status";
-
-const GaugeComponent = dynamic(() => import("react-gauge-component"), {
-  ssr: false,
-});
 
 export default function TodayHighlight() {
   return (
