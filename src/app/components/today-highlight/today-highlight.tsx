@@ -14,7 +14,7 @@ import FeelsLike from "./feels-like";
 
 export default function TodayHighlight() {
   return (
-    <main className="bg-[#2a2c30] rounded-2xl p-8">
+    <main className="bg-[#2a2c30] rounded-2xl p-8 col-span-3 ">
       <h1>Today&apos;s Highlight</h1>
       <div className="mt-4 grid grid-cols-3 gap-4">
         <WindStatus />
