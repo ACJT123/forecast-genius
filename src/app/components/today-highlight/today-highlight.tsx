@@ -10,6 +10,7 @@ import WindStatus from "./wind-status";
 import SunriseSunset from "./sunrise-sunset";
 import Humidity from "./humidity";
 import Visibility from "./visibility";
+import FeelsLike from "./feels-like";
 
 export default function TodayHighlight() {
   return (
@@ -21,10 +22,7 @@ export default function TodayHighlight() {
         <SunriseSunset />
         <Humidity />
         <Visibility />
-        <CardSm>
-          <div>Feels Like</div>
-          {data.timelines.daily[0].values.temperatureMax}
-        </CardSm>
+        <FeelsLike />
       </div>
     </main>
   );
