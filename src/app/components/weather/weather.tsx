@@ -22,7 +22,7 @@ export default function Weather() {
         <Image
           width="100"
           height="100"
-          src={"/assets/img/sun-cloud.png"}
+          src={"/sun-cloud.png"}
           alt="search--v1"
         />
         <div>
