@@ -7,7 +7,7 @@ import Weather from "./components/weather/weather";
 
 export default function Home() {
   return (
-    <main className="grid grid-cols-4 gap-8 p-4">
+    <main className="grid grid-cols-3 gap-8 p-4">
       <Weather />
       <TodayHighlight />
     </main>
