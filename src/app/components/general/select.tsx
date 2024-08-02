@@ -1,10 +1,14 @@
 import { ConfigProvider, Select } from "antd";
 
-type IForecastSelect = {
+type ISelectComponent = {
   handleChange: (value: string) => void;
+  options: { value: string; label: string }[];
 };
 
-export default function ForecastSelect({ handleChange }: IForecastSelect) {
+export default function SelectComponent({
+  handleChange,
+  options,
+}: ISelectComponent) {
   return (
     <ConfigProvider
       theme={{
@@ -25,11 +29,7 @@ export default function ForecastSelect({ handleChange }: IForecastSelect) {
         defaultValue="Daily"
         onChange={handleChange}
         style={{ width: 100 }}
-        options={[
-          { value: "Daily", label: "Daily" },
-          { value: "Hourly", label: "Hourly" },
-          { value: "Minutely", label: "Minutely" },
-        ]}
+        options={options}
       />
     </ConfigProvider>
   );
