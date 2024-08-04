@@ -22,7 +22,8 @@
     "react-dom": "^18",
     "react-gauge-component": "^1.2.21",
     "sass": "^1.77.8",
-    "styled-components": "^6.1.12"
+    "styled-components": "^6.1.12",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@types/luxon": "^3.4.2",
