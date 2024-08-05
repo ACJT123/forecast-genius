@@ -25,14 +25,14 @@ export const WEATHER_CODES = {
 };
 
 export const WEATHER_IMAGES = {
-  CLOUDY: "https://img.icons8.com/fluency/48/cloud.png",
-  PARTLY_CLOUDY: "https://img.icons8.com/fluency/48/partly-cloudy-day.png",
-  FOG: "https://img.icons8.com/fluency/48/foggy-night-1.png",
-  HEAVY_RAIN: "https://img.icons8.com/fluency/48/intense-rain.png",
-  LIGHT_RAIN: "https://img.icons8.com/fluency/48/light-rain.png",
-  SNOW: "https://img.icons8.com/fluency/48/snow.png",
-  LIGHT_SNOW: "https://img.icons8.com/fluency/48/light-snow.png",
-  THUNDERSTORM: "https://img.icons8.com/fluency/48/storm.png",
+  CLOUDY: "https://img.icons8.com/fluency/96/cloud.png",
+  PARTLY_CLOUDY: "https://img.icons8.com/fluency/96/partly-cloudy-day.png",
+  FOG: "https://img.icons8.com/fluency/96/foggy-night-1.png",
+  HEAVY_RAIN: "https://img.icons8.com/fluency/96/intense-rain.png",
+  LIGHT_RAIN: "https://img.icons8.com/fluency/96/light-rain.png",
+  SNOW: "https://img.icons8.com/fluency/96/snow.png",
+  LIGHT_SNOW: "https://img.icons8.com/fluency/96/light-snow.png",
+  THUNDERSTORM: "https://img.icons8.com/fluency/96/storm.png",
 };
 
 export const renderWeatherIcon = (weatherCode: number) => {
