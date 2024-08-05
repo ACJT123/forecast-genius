@@ -3,11 +3,13 @@ import { ConfigProvider, Select } from "antd";
 type ISelectComponent = {
   handleChange: (value: string) => void;
   options: { value: string; label: string }[];
+  defaultValue: string;
 };
 
 export default function SelectComponent({
   handleChange,
   options,
+  defaultValue,
 }: ISelectComponent) {
   return (
     <ConfigProvider
@@ -26,7 +28,7 @@ export default function SelectComponent({
       }}
     >
       <Select
-        defaultValue="Daily"
+        defaultValue={defaultValue}
         onChange={handleChange}
         style={{ width: 100 }}
         options={options}

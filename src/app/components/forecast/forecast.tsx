@@ -23,6 +23,7 @@ export default function Forecast() {
             { value: "Minutely", label: "Minutely" },
           ]}
           handleChange={handleChange}
+          defaultValue="Daily"
         />
       </div>
       <div className="bg-[#2a2c30] rounded-2xl mt-4 py-4">
