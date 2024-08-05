@@ -11,12 +11,26 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import LocationSearch from "./location-search";
 import { renderWeatherIcon } from "@/app/models/forecast";
+import "./style.scss";
 
 export default function Weather() {
   const [openSearch, setOpenSearch] = useState(false);
   const [locationSearch, setLocationSearch] = useState<string>(
     encodeURI("Kuala Lumpur")
   );
+
+  useEffect(() => {
+    // get location from local storage
+    const savedLocation = localStorage.getItem("location")?.split(",");
+    if (savedLocation) {
+      for (const v of savedLocation) {
+        if (v !== "") {
+          setLocationSearch(encodeURI(v));
+          break;
+        }
+      }
+    }
+  }, [locationSearch]);
 
   const { data, isLoading, error, mutate } = useSWR(
     `https://api.tomorrow.io/v4/weather/realtime?location=${locationSearch}` +
@@ -26,8 +40,6 @@ export default function Weather() {
       errorRetryInterval: 10000,
     }
   );
-
-  // console.log(data);
 
   const mockData = {
     data: {
@@ -71,8 +83,6 @@ export default function Weather() {
   const code = weatherData?.values.weatherCode;
   const weatherValues = weatherData?.values;
 
-  console.log(time);
-
   return (
     <main className="bg-[#2a2c30] rounded-2xl p-8">
       {isLoading ? (
@@ -85,16 +95,20 @@ export default function Weather() {
               setOpenSearch(false);
             }}
             concat={(value) => {
-              // console.log(value);
               for (const v of value) {
                 if (v !== "") {
                   setLocationSearch(v);
-                  mutate();
                   break;
                 }
               }
+
+              // save to local storage
+              localStorage.setItem("location", value.join(","));
+
+              setOpenSearch(false);
             }}
           />
+
           <div className="rounded-full p-4 bg-black/50 w-fit ml-auto">
             <Image
               width="30"
@@ -105,6 +119,7 @@ export default function Weather() {
               onClick={() => setOpenSearch(true)}
             />
           </div>
+
           <div className="flex flex-col gap-4">
             <Image
               width="100"
@@ -137,6 +152,7 @@ export default function Weather() {
                 />
                 {location}
               </div>
+
               <div className="flex items-start gap-2">
                 <Image
                   width="20"

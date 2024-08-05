@@ -23,44 +23,55 @@ export default function LocationSearch({
   const [city, setCity] = useState<string>("");
 
   return (
-    <Modal mask centered open={open} onCancel={onClose} footer={null}>
-      <CountrySelect
-        onChange={(value: string) => {
-          setCountry(value);
-        }}
-        onClose={onClose}
-        open={open}
-      />
-
-      <StatesSelect
-        onChange={(value: string) => {
-          setState(value);
-        }}
-        onClose={onClose}
-        open={open}
-        country={country}
-      />
-
-      <CitySelect
-        onChange={(value: string) => {
-          setCity(value);
-        }}
-        onClose={onClose}
-        open={open}
-        country={country}
-        state={state}
-      />
-
-      <div className="flex gap-4">
-        <button onClick={onClose}>Close</button>
-        <button
-          onClick={() => {
-            // console.log(city, state, country);
-            concat([city, state, country]);
+    <Modal
+      mask
+      centered
+      open={open}
+      onCancel={onClose}
+      footer={null}
+      maskClosable={false}
+      className="location-search"
+    >
+      <div className="flex flex-col gap-4 mt-8">
+        <CountrySelect
+          onChange={(value: string) => {
+            setCountry(value);
           }}
-        >
-          Confirm
-        </button>
+          onClose={onClose}
+          open={open}
+        />
+
+        <StatesSelect
+          onChange={(value: string) => {
+            setState(value);
+          }}
+          onClose={onClose}
+          open={open}
+          country={country}
+        />
+
+        <CitySelect
+          onChange={(value: string) => {
+            setCity(value);
+          }}
+          onClose={onClose}
+          open={open}
+          country={country}
+          state={state}
+        />
+
+        <div className="flex gap-4 w-fit ml-auto">
+          <button onClick={onClose}>Close</button>
+          <button
+            onClick={() => {
+              // console.log(city, state, country);
+              concat([city, state, country]);
+            }}
+            className="bg-blue-500 te+t-white px-4 py-2 rounded-md"
+          >
+            Confirm
+          </button>
+        </div>
       </div>
     </Modal>
   );
