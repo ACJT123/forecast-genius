@@ -114,7 +114,7 @@ export default function Suggests() {
     <main className="col-span-2 h-full">
       {contextHolder}
       <div className="flex items-center justify-between">
-        <h1>Based on today's weather, here are some suggested activities</h1>
+        <h1>Based on today&apos;s weather, here are some suggested activities</h1>
 
         <Dropdown
           trigger={["click"]}
