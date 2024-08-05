@@ -33,7 +33,7 @@ export default function Weather() {
   }, [locationSearch]);
 
   const { data, isLoading, error, mutate } = useSWR(
-    `https://api.tomorrow.io/v4/weather/realtime?location=${locationSearch}` +
+    // `https://api.tomorrow.io/v4/weather/realtime?location=${locationSearch}` +
       API_KEY,
     getData,
     {
