@@ -6,20 +6,15 @@ import { CSS } from "@dnd-kit/utilities";
 import { DateTime } from "luxon";
 import Image from "next/image";
 import TimePicker from "./time-picker";
+import { Controller } from "react-hook-form";
 
 type ISortableItem = {
   register: any;
+  control: any;
   id: number;
-  suggestedAcvities: {
-    time: string;
-  }[];
 };
 
-export default function SortableItem({
-  register,
-  id,
-  suggestedAcvities,
-}: ISortableItem) {
+export default function SortableItem({ register, control, id }: ISortableItem) {
   const {
     attributes,
     listeners,
@@ -34,17 +29,13 @@ export default function SortableItem({
     transition,
   };
 
-  const time = DateTime.fromISO(suggestedAcvities[id].time, {
-    zone: "utc",
-  });
-
   return (
     <div
-      ref={setNodeRef}
+      // ref={setNodeRef}
       style={style}
       className="bg-[#111e25] rounded-2xl px-4 pt-4 pb-8"
     >
-      <Image
+      {/* <Image
         {...attributes}
         {...listeners}
         ref={setActivatorNodeRef}
@@ -53,7 +44,7 @@ export default function SortableItem({
         src="https://img.icons8.com/ios-glyphs/60/FFFFFF/resize-four-directions--v1.png"
         alt="resize-four-directions--v1"
         className="cursor-pointer hover:brightness-150 ml-auto"
-      />
+      /> */}
 
       <div className="text-center mt-4">
         <input
@@ -63,11 +54,19 @@ export default function SortableItem({
           className="w-full bg-[#2a2c30] text-white p-2 rounded-lg"
         />
 
-        <TimePicker
-          className="w-full bg-[#2a2c30] text-white p-2 rounded-lg my-4"
-          defaultValue={time}
-          needConfirm={false}
-          format={"t"}
+        <Controller
+          control={control}
+          name={`suggestedActivities.${id}.time`}
+          render={({ field: { onChange, onBlur, value, ref } }) => {
+            return (
+              <TimePicker
+                onChange={onChange}
+                value={value}
+                className="w-full bg-[#2a2c30] text-white p-2 rounded-lg my-4"
+                format={"t"}
+              />
+            );
+          }}
         />
 
         <textarea

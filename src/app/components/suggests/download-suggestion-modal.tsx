@@ -5,7 +5,7 @@ import { Margin, usePDF } from "react-to-pdf";
 type IDownloadSuggestionModal = {
   suggestions: {
     activity: string;
-    time: string;
+    time: DateTime;
     description: string;
   }[];
 };
@@ -20,14 +20,14 @@ export default function DownloadSuggestionModal({
     },
   });
 
-  const date = DateTime.fromISO(suggestions[0].time, { zone: "utc" }).toFormat(
-    "yyyy-MM-dd"
-  );
+  const date = suggestions[0].time.toFormat("yyyy-MM-dd");
 
-  suggestions.map(
-    (item) =>
-      (item.time = DateTime.fromISO(item.time, { zone: "utc" }).toFormat("t"))
-  );
+  const suggestionsData = suggestions
+    .sort((a, b) => a.time.toMillis() - b.time.toMillis())
+    .map((suggestion) => ({
+      ...suggestion,
+      time: suggestion.time.toFormat("t"),
+    }));
 
   const columns = [
     {
@@ -54,8 +54,9 @@ export default function DownloadSuggestionModal({
 
         <Table
           columns={columns}
-          dataSource={suggestions}
+          dataSource={suggestionsData}
           className="mt-4"
+          rowKey={(record) => record.activity}
           pagination={false}
         />
       </div>

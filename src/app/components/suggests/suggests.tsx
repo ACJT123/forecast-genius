@@ -2,7 +2,7 @@
 
 import { suggestedActivity } from "@/app/data";
 import { DateTime } from "luxon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -27,51 +27,53 @@ import SelectComponent from "../general/select";
 import { Dropdown, Modal } from "antd";
 import Image from "next/image";
 import DownloadSuggestionModal from "./download-suggestion-modal";
+import { menu } from "@/app/models/suggests";
+import { convertToUTC } from "@/app/util/date";
 
 export default function Suggests() {
   const [modal, contextHolder] = Modal.useModal();
 
-  const [items, setItems] = useState(
-    suggestedActivity.map((_, index) => index)
-  );
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const [sortedItems, setSortedItems] = useState<any[]>(suggestedActivity);
+  // const sensors = useSensors(
+  //   useSensor(PointerSensor),
+  //   useSensor(KeyboardSensor, {
+  //     coordinateGetter: sortableKeyboardCoordinates,
+  //   })
+  // );
 
-  const handleDragEnd = (event: any) => {
-    const { active, over } = event;
+  // const handleDragEnd = (event: any) => {
+  //   const { active, over } = event;
 
-    if (active.id !== over.id) {
-      setItems((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
+  //   if (active.id !== over.id) {
+  //     setItems((items) => {
+  //       const oldIndex = items.indexOf(active.id);
+  //       const newIndex = items.indexOf(over.id);
 
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
-  };
+  //       return arrayMove(items, oldIndex, newIndex);
+  //     });
+  //   }
+  // };
 
-  const { register, watch } = useForm<any>({
+  const { register, watch, control } = useForm<any>({
     defaultValues: {
       suggestedActivities: suggestedActivity.map((activity) => ({
         activity: activity.activity,
-        time: activity.time,
+        time: DateTime.fromISO(activity.time, {
+          zone: "utc",
+        }),
         description: activity.description,
       })),
     },
   });
 
-  const data = watch();
+  console.log(watch().suggestedActivities);
 
   const downloadSuggestionModal = () => {
     Modal.info({
       icon: null,
       width: 800,
       content: (
-        <DownloadSuggestionModal suggestions={data.suggestedActivities} />
+        <DownloadSuggestionModal suggestions={watch().suggestedActivities} />
       ),
       centered: true,
       footer: null,
@@ -95,26 +97,13 @@ export default function Suggests() {
     }
   };
 
-  const menu = [
-    {
-      key: "1",
-      label: "Download Suggestion",
-    },
-    {
-      key: "2",
-      label: "Insert to Google Calendar",
-    },
-    {
-      key: "3",
-      label: "Refresh",
-    },
-  ];
-
   return (
     <main className="col-span-2 h-full">
       {contextHolder}
       <div className="flex items-center justify-between">
-        <h1>Based on today&apos;s weather, here are some suggested activities</h1>
+        <h1>
+          Based on today&apos;s weather, here are some suggested activities
+        </h1>
 
         <Dropdown
           trigger={["click"]}
@@ -134,22 +123,22 @@ export default function Suggests() {
       </div>
 
       <div className="bg-[#2a2c30] rounded-2xl mt-6 p-4 h-full">
-        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-          <SortableContext items={items} strategy={rectSwappingStrategy}>
-            <form>
-              <div className="grid grid-cols-4 gap-4">
-                {items.map((id) => (
-                  <SortableItem
-                    register={register}
-                    key={id}
-                    id={id}
-                    suggestedAcvities={data.suggestedActivities}
-                  />
-                ))}
-              </div>
-            </form>
-          </SortableContext>
-        </DndContext>
+        {/* <DndContext sensors={sensors} onDragEnd={handleDragEnd}> */}
+        {/* <SortableContext items={sortedItems} strategy={rectSwappingStrategy}> */}
+        <form>
+          <div className="grid grid-cols-4 gap-4">
+            {sortedItems.map((_, index) => (
+              <SortableItem
+                register={register}
+                control={control}
+                key={index}
+                id={index}
+              />
+            ))}
+          </div>
+        </form>
+        {/* </SortableContext> */}
+        {/* </DndContext> */}
       </div>
     </main>
   );
