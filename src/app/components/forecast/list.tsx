@@ -50,7 +50,7 @@ export default function List({ selectedForecastType }: Ilist) {
   }, [selectedForecastType]);
 
   return (
-    <div className="h-[400px] overflow-scroll forecast-list flex flex-col gap-8">
+    <div className="h-full max-h-[900px] overflow-scroll forecast-list flex flex-col gap-8">
       {data.map((item, index) => (
         <div
           className="grid grid-cols-3 items-center justify-items-center"
