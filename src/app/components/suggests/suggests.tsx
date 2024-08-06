@@ -29,6 +29,10 @@ import Image from "next/image";
 import DownloadSuggestionModal from "./download-suggestion-modal";
 import { menu } from "@/app/models/suggests";
 import { convertToUTC } from "@/app/util/date";
+import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
+import { auth, firebaseConfig } from "@/app/models/firebase";
+
+declare const gapi: any;
 
 export default function Suggests() {
   const [modal, contextHolder] = Modal.useModal();
@@ -66,8 +70,6 @@ export default function Suggests() {
     },
   });
 
-  console.log(watch().suggestedActivities);
-
   const downloadSuggestionModal = () => {
     Modal.info({
       icon: null,
@@ -97,6 +99,39 @@ export default function Suggests() {
     }
   };
 
+  useEffect(() => {
+    auth.onAuthStateChanged(function (user) {
+      // Make sure there is a valid user object
+
+      if (user) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://apis.google.com/js/api.js";
+        // Once the Google API Client is loaded, you can run your code
+        script.onload = function (e) {
+          // Initialize the Google API Client with the config object
+          gapi.client
+            .init({
+              apiKey: firebaseConfig.apiKey,
+              clientId: firebaseConfig.clientId,
+              scope: firebaseConfig.scopes.join(" "),
+            })
+            // Loading is finished, so start the app
+            .then(function () {
+              // Make sure the Google API Client is properly signed in
+              if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+                auth.currentUser?.getIdToken().then(function (token) {
+                  console.log(token);
+                });
+              }
+            });
+        };
+        // Add to the document
+        document.getElementsByTagName("head")[0].appendChild(script);
+      }
+    });
+  }, []);
+
   return (
     <main className="col-span-2 h-full">
       {contextHolder}
@@ -104,6 +139,18 @@ export default function Suggests() {
         <h1>
           Based on today&apos;s weather, here are some suggested activities
         </h1>
+
+        <button
+          onClick={async () => {
+            await signInWithRedirect(auth, new GoogleAuthProvider()).then(
+              () => {
+                console.log("Signed in");
+              }
+            );
+          }}
+        >
+          Login
+        </button>
 
         <Dropdown
           trigger={["click"]}
