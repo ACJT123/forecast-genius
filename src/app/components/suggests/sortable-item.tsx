@@ -68,7 +68,6 @@ export default function SortableItem({
           defaultValue={time}
           needConfirm={false}
           format={"t"}
-          use12Hours={true}
         />
 
         <textarea
