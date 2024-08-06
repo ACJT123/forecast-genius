@@ -133,7 +133,7 @@ export default function Suggests() {
   }, []);
 
   return (
-    <main className="col-span-2 h-full">
+    <main className="col-span-2 h-full order-4 md:order-4">
       {contextHolder}
       <div className="flex items-center justify-between">
         <h1>
@@ -173,7 +173,7 @@ export default function Suggests() {
         {/* <DndContext sensors={sensors} onDragEnd={handleDragEnd}> */}
         {/* <SortableContext items={sortedItems} strategy={rectSwappingStrategy}> */}
         <form>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
             {sortedItems.map((_, index) => (
               <SortableItem
                 register={register}
