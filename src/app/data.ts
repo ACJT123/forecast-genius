@@ -12408,17 +12408,36 @@ export const forecastData = {
   },
 };
 
-
 export const suggestedActivity = [
+  {
+    activity: "Running",
+    description: "Cool morning for a run",
+    time: "2024-08-01T06:00:00Z",
+  },
+  {
+    activity: "Yoga",
+    description: "Relaxing morning for outdoor yoga",
+    time: "2024-08-01T07:00:00Z",
+  },
+  {
+    activity: "Hiking",
+    description: "Perfect weather for a hike in the mountains",
+    time: "2024-08-01T08:00:00Z",
+  },
+  {
+    activity: "Fishing",
+    description: "Peaceful day for fishing by the lake",
+    time: "2024-08-01T09:00:00Z",
+  },
   {
     activity: "Biking",
     description: "Great day for a bike ride",
     time: "2024-08-01T10:00:00Z",
   },
   {
-    activity: "Hiking",
-    description: "Perfect weather for a hike in the mountains",
-    time: "2024-08-01T08:00:00Z",
+    activity: "Kayaking",
+    description: "Adventure awaits on the river",
+    time: "2024-08-01T11:00:00Z",
   },
   {
     activity: "Picnic",
@@ -12431,33 +12450,13 @@ export const suggestedActivity = [
     time: "2024-08-01T14:00:00Z",
   },
   {
-    activity: "Running",
-    description: "Cool morning for a run",
-    time: "2024-08-01T06:00:00Z",
+    activity: "Cycling",
+    description: "Sunny afternoon for a cycling tour",
+    time: "2024-08-01T15:00:00Z",
   },
   {
     activity: "Stargazing",
     description: "Clear skies for stargazing tonight",
     time: "2024-08-01T22:00:00Z",
   },
-  {
-    activity: "Yoga",
-    description: "Relaxing morning for outdoor yoga",
-    time: "2024-08-01T07:00:00Z",
-  },
-  {
-    activity: "Fishing",
-    description: "Peaceful day for fishing by the lake",
-    time: "2024-08-01T09:00:00Z",
-  },
-  {
-    activity: "Cycling",
-    description: "Sunny afternoon for a cycling tour",
-    time: "2024-08-01T15:00:00Z",
-  },
-  {
-    activity: "Kayaking",
-    description: "Adventure awaits on the river",
-    time: "2024-08-01T11:00:00Z",
-  }
 ];
