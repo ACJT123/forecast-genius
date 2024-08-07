@@ -19,6 +19,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} text-white bg-black`}>
+        <script src="https://apis.google.com/js/api.js" async></script>
+        <script src="https://accounts.google.com/gsi/client" async></script>
         {children}
       </body>
     </html>
