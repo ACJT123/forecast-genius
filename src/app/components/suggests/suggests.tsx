@@ -29,7 +29,7 @@ export default function Suggests() {
   });
 
   const downloadSuggestionModal = () => {
-    Modal.info({
+    modal.info({
       icon: null,
       width: 800,
       content: (
