@@ -3,27 +3,8 @@
 import { suggestedActivity } from "@/app/data";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-  rectSwappingStrategy,
-} from "@dnd-kit/sortable";
-import SortableItem from "./sortable-item";
-import Item from "antd/es/list/Item";
+import FormItem from "./form-item";
 import { useForm, SubmitHandler, useFieldArray, set } from "react-hook-form";
-import SelectComponent from "../general/select";
 import { Dropdown, Modal, Spin } from "antd";
 import Image from "next/image";
 import DownloadSuggestionModal from "./download-suggestion-modal";
@@ -35,7 +16,7 @@ export default function Suggests() {
   const [modal, contextHolder] = Modal.useModal();
   const [isInserting, setIsInserting] = useState(false);
 
-  const [sortedItems, setSortedItems] = useState<any[]>(suggestedActivity);
+  const [suggested, setSuggested] = useState<any[]>(suggestedActivity);
 
   const { register, watch, control } = useForm<any>({
     defaultValues: {
@@ -170,8 +151,6 @@ export default function Suggests() {
           Based on today&apos;s weather, here are some suggested activities
         </h1>
 
-        <button>Login</button>
-
         <Dropdown
           trigger={["click"]}
           menu={{
@@ -190,18 +169,16 @@ export default function Suggests() {
       </div>
 
       <div className="bg-[#2a2c30] rounded-2xl mt-6 p-4 h-full">
-        <form>
-          <div className="grid grid-cols-4 gap-4">
-            {sortedItems.map((_, index) => (
-              <SortableItem
-                register={register}
-                control={control}
-                key={index}
-                id={index}
-              />
-            ))}
-          </div>
-        </form>
+        <div className="grid grid-cols-4 gap-4">
+          {suggested.map((_, index) => (
+            <FormItem
+              register={register}
+              control={control}
+              key={index}
+              id={index}
+            />
+          ))}
+        </div>
       </div>
       {contextHolder}
     </main>
