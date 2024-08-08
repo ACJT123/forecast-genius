@@ -9,6 +9,9 @@ import { Dropdown, Modal, Spin } from "antd";
 import Image from "next/image";
 import DownloadSuggestionModal from "./download-suggestion-modal";
 import { menu } from "@/app/models/suggests";
+import { ISuggested } from "@/app/types/suggested";
+import suggestedActivitySchema from "@/app/schema/suggested";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 declare const window: any;
 
@@ -16,15 +19,21 @@ export default function Suggests() {
   const [modal, contextHolder] = Modal.useModal();
   const [isInserting, setIsInserting] = useState(false);
 
-  const [suggested, setSuggested] = useState<any[]>(suggestedActivity);
+  const [suggested, setSuggested] = useState<ISuggested>(
+    suggestedActivity.map((activity) => ({
+      activity: activity.activity,
+      startTime: DateTime.fromISO(activity.startTime),
+      endTime: DateTime.fromISO(activity.endTime),
+      description: activity.description,
+    }))
+  );
 
-  const { register, watch, control } = useForm<any>({
+  const { register, watch, control } = useForm<{
+    suggestedActivities: ISuggested;
+  }>({
+    // resolver: yupResolver(suggestedActivitySchema),
     defaultValues: {
-      suggestedActivities: suggestedActivity.map((activity) => ({
-        activity: activity.activity,
-        time: DateTime.fromISO(activity.time),
-        description: activity.description,
-      })),
+      suggestedActivities: suggested,
     },
   });
 
@@ -42,8 +51,6 @@ export default function Suggests() {
   };
 
   const insertToGoogleCalendar = () => {
-
-
     const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
     const initializeGapiClient = async () => {
@@ -75,10 +82,10 @@ export default function Suggests() {
             summary: activity.activity,
             description: activity.description,
             start: {
-              dateTime: activity.time.toISO(),
+              dateTime: activity.startTime.toISO(),
             },
             end: {
-              dateTime: activity.time.plus({ hours: 1 }).toISO(),
+              dateTime: activity.endTime.toISO(),
             },
           }));
 
@@ -122,12 +129,10 @@ export default function Suggests() {
           });
         };
       } else {
-
       }
     };
 
     window.gapi.load("client", initializeGapiClient);
-
   };
 
   const handleChange = (value: any) => {
