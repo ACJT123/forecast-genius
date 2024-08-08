@@ -8,13 +8,13 @@ import Image from "next/image";
 import TimePicker from "./time-picker";
 import { Controller } from "react-hook-form";
 
-type ISortableItem = {
+type IFormItem = {
   register: any;
   control: any;
   id: number;
 };
 
-export default function SortableItem({ register, control, id }: ISortableItem) {
+export default function FormItem({ register, control, id }: IFormItem) {
   const {
     attributes,
     listeners,

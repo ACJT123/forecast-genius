@@ -51,7 +51,7 @@ export default function DownloadSuggestionModal({
     <>
       <div ref={targetRef}>
         <h1>Date: {date}</h1>
-
+    
         <Table
           columns={columns}
           dataSource={suggestionsData}
