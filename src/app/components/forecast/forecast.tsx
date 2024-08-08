@@ -13,7 +13,7 @@ export default function Forecast() {
   };
 
   return (
-    <main className="order-2 md:order-3">
+    <main className="">
       <div className="flex items-center justify-between">
         <h1 className="capitalize">{forecastType} Forecast</h1>
         <SelectComponent
