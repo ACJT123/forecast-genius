@@ -84,7 +84,7 @@ export default function Weather() {
   const weatherValues = weatherData?.values;
 
   return (
-    <main className="bg-[#2a2c30] rounded-2xl p-8">
+    <main className="bg-[#2a2c30] rounded-2xl p-8 order-1 md:order-1 h-full">
       {isLoading ? (
         <Spin />
       ) : (
