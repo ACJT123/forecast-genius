@@ -42,7 +42,7 @@ export default function Suggests() {
   };
 
   const insertToGoogleCalendar = () => {
-    setIsInserting(true);
+
 
     const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
@@ -68,6 +68,8 @@ export default function Suggests() {
           if (resp.error !== undefined) {
             throw resp;
           }
+
+          setIsInserting(true);
 
           const events = watch().suggestedActivities.map((activity: any) => ({
             summary: activity.activity,
@@ -119,10 +121,13 @@ export default function Suggests() {
             });
           });
         };
+      } else {
+
       }
     };
 
     window.gapi.load("client", initializeGapiClient);
+
   };
 
   const handleChange = (value: any) => {
