@@ -23,6 +23,7 @@ export default function List({ selectedForecastType }: Ilist) {
         weatherCode: item.values.weatherCodeMin,
         time: item.time,
       }));
+
       setPlainData(data);
     } else if (selectedForecastType === "hourly") {
       data = forecastData?.forecastData.timelines.hourly.map((item: any) => ({
@@ -50,6 +51,7 @@ export default function List({ selectedForecastType }: Ilist) {
         weatherCode: item.values.weatherCode,
         time: item.time,
       }));
+
       setPlainData(data);
     }
   }, [selectedForecastType, forecastData]);
@@ -59,7 +61,9 @@ export default function List({ selectedForecastType }: Ilist) {
       return Object.keys(groupedData).map((date) => (
         <div key={date} className="flex flex-col gap-2">
           <div className="pl-4 font-bold text-lg">
-            {DateTime.fromISO(date).toFormat("dd LLL yyyy")}
+            {`${DateTime.fromISO(date).toFormat(
+              "dd LLL yyyy"
+            )} (${DateTime.fromISO(date).toFormat("EEEE")})`}
           </div>
 
           {groupedData[date].map((item, index) => (
