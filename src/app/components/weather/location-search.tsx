@@ -61,13 +61,12 @@ export default function LocationSearch({
         />
 
         <div className="flex gap-4 w-fit ml-auto">
-          <button onClick={onClose}>Close</button>
           <button
             onClick={() => {
               // console.log(city, state, country);
               concat([city, state, country]);
             }}
-            className="bg-blue-500 te+t-white px-4 py-2 rounded-md"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md"
           >
             Confirm
           </button>
