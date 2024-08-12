@@ -224,8 +224,9 @@ export default function Suggests() {
           Date: {DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
         </h1>
       ))}
+
       <div className="bg-[#2a2c30] rounded-2xl mt-6 p-4 h-full">
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {suggested?.map((_, index) => (
             <FormItem
               register={register}
@@ -236,6 +237,7 @@ export default function Suggests() {
           ))}
         </div>
       </div>
+
       {contextHolder}
     </main>
   );
