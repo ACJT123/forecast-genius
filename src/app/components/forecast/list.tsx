@@ -18,21 +18,21 @@ export default function List({ selectedForecastType }: Ilist) {
     let data = [];
 
     if (selectedForecastType === "daily") {
-      data = forecastData?.forecastData.timelines.daily.map((item) => ({
+      data = forecastData?.forecastData.timelines.daily.map((item: any) => ({
         temperature: item.values.temperatureAvg,
         weatherCode: item.values.weatherCodeMin,
         time: item.time,
       }));
       setPlainData(data);
     } else if (selectedForecastType === "hourly") {
-      data = forecastData?.forecastData.timelines.hourly.map((item) => ({
+      data = forecastData?.forecastData.timelines.hourly.map((item: any) => ({
         temperature: item.values.temperature,
         weatherCode: item.values.weatherCode,
         time: item.time,
       }));
 
       // Group hourly data by date using a plain object
-      const grouped = data.reduce((acc, item) => {
+      const grouped = data.reduce((acc: any, item: any) => {
         const date = DateTime.fromISO(item.time).toFormat("yyyy-MM-dd"); // for grouping by date
 
         if (!acc[date]) {
@@ -45,7 +45,7 @@ export default function List({ selectedForecastType }: Ilist) {
 
       setGroupedData(grouped);
     } else {
-      data = forecastData?.forecastData.timelines.minutely.map((item) => ({
+      data = forecastData?.forecastData.timelines.minutely.map((item: any) => ({
         temperature: item.values.temperature,
         weatherCode: item.values.weatherCode,
         time: item.time,
