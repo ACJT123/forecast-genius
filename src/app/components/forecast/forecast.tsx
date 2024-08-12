@@ -20,7 +20,7 @@ export default function Forecast() {
           options={[
             { value: "Daily", label: "Daily" },
             { value: "Hourly", label: "Hourly" },
-            { value: "Minutely", label: "Minutely" },
+            // { value: "Minutely", label: "Minutely" }, // temporarily removed
           ]}
           handleChange={handleChange}
           defaultValue="Daily"
