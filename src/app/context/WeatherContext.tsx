@@ -57,7 +57,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
     isLoading: weatherLoading,
   } = useSWR(
     locationSearch
-      ? `http://localhost:4000/weather/realtime1/${locationSearch}`
+      ? `http://localhost:4000/weather/realtime/${locationSearch}`
       : null,
     getData,
     {
@@ -72,7 +72,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
     isLoading: forecastLoading,
   } = useSWR(
     locationSearch
-      ? `http://localhost:4000/weather/forecast1/${locationSearch}`
+      ? `http://localhost:4000/weather/forecast/${locationSearch}`
       : null,
     getData,
     {
@@ -84,47 +84,21 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
   const isLoading = weatherLoading || forecastLoading;
   const error = weatherError || forecastError;
 
-  const mockData = {
-    data: {
-      time: "2023-01-26T07:48:00Z",
-      values: {
-        cloudBase: 0.07,
-        cloudCeiling: 0.07,
-        cloudCover: 100,
-        dewPoint: 0.88,
-        freezingRainIntensity: 0,
-        humidity: 96,
-        precipitationProbability: 0,
-        pressureSurfaceLevel: 984.57,
-        rainIntensity: 0,
-        sleetIntensity: 0,
-        snowIntensity: 0,
-        temperature: 1.88,
-        temperatureApparent: -0.69,
-        uvHealthConcern: 0,
-        uvIndex: 0,
-        visibility: 9.9,
-        weatherCode: 1001,
-        windDirection: 10,
-        windGust: 3.38,
-        windSpeed: 2.38,
-      },
-    },
-    location: {
-      lat: 43.653480529785156,
-      lon: -79.3839340209961,
-      name: "Old Toronto, Toronto, Golden Horseshoe, Ontario, Canada",
-      type: "administrative",
-    },
-  };
-
-  console.log(weatherData, forecastData);
+  // save location coordinates to local storage
+  useEffect(() => {
+    if (weatherData) {
+      localStorage.setItem(
+        "cor",
+        `${weatherData.location.lat},${weatherData.location.lon}`
+      );
+    }
+  }, [weatherData]);
 
   return (
     <WeatherContext.Provider
       value={{
-        weatherData: weatherData || mockData,
-        forecastData: forecastData || mockData,
+        weatherData: weatherData,
+        forecastData: forecastData,
         isLoading,
         savedLocation: locationSearch || "",
         setLocationSearch,

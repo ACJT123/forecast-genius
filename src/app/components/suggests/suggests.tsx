@@ -4,7 +4,7 @@ import { suggestedActivity } from "@/app/data";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import FormItem from "./form-item";
-import { useForm, SubmitHandler, useFieldArray, set } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { Dropdown, Modal, Spin } from "antd";
 import Image from "next/image";
 import DownloadSuggestionModal from "./download-suggestion-modal";
@@ -12,32 +12,54 @@ import { menu } from "@/app/models/suggests";
 import { ISuggested } from "@/app/types/suggested";
 import suggestedActivitySchema from "@/app/schema/suggested";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useWeather } from "@/app/context/WeatherContext";
+import { changeTimeZones } from "@/app/util/date";
 
 declare const window: any;
 
 export default function Suggests() {
   const [modal, contextHolder] = Modal.useModal();
   const [isInserting, setIsInserting] = useState(false);
+  const { forecastData } = useWeather();
 
-  const [suggested, setSuggested] = useState<ISuggested>(
-    suggestedActivity.map((activity) => ({
-      activity: activity.activity,
-      startTime: DateTime.fromISO(activity.startTime),
-      endTime: DateTime.fromISO(activity.endTime),
-      description: activity.description,
-    }))
-  );
+  const [suggested, setSuggested] = useState<ISuggested[]>([]);
+  const [dates, setDates] = useState<any[]>([]);
 
-  const { register, watch, control } = useForm<{
-    suggestedActivities: ISuggested;
-  }>({
-    // resolver: yupResolver(suggestedActivitySchema),
-    defaultValues: {
-      suggestedActivities: suggested,
-    },
-  });
+  useEffect(() => {
+    if (forecastData) {
+      const activities = forecastData?.suggestions;
+
+      // activities?.forEach((activity: any) => {
+      //   const startTimeISO = DateTime.fromISO(activity.startTime)?.toISO();
+      //   const endTimeISO = DateTime.fromISO(activity.endTime)?.toISO();
+
+      //   // Check if either startTime or endTime is already in the dates array
+      //   if (!dates.includes(startTimeISO) && !dates.includes(endTimeISO)) {
+      //     const a = dates.push(startTimeISO);
+
+      //     setDates(a);
+      //   }
+      // });
+
+      // console.log(dates);
+      setSuggested(activities || []);
+    }
+  }, [forecastData, dates]);
+
+  const { register, watch, control, setValue } = useForm<{
+    suggestedActivities: ISuggested[];
+  }>();
+
+  // Set the form values once suggested activities are available
+  useEffect(() => {
+    if (suggested.length > 0) {
+      setValue("suggestedActivities", suggested);
+    }
+  }, [suggested, setValue]);
 
   const downloadSuggestionModal = () => {
+    if (suggested.length === 0) return;
+
     modal.info({
       icon: null,
       width: 800,
@@ -48,6 +70,13 @@ export default function Suggests() {
       footer: null,
       closable: true,
     });
+  };
+
+  const convertedDates = async (start: string, end: string) => {
+    const s = await changeTimeZones(start);
+    const e = await changeTimeZones(end);
+
+    return { start: s, end: e };
   };
 
   const insertToGoogleCalendar = () => {
@@ -78,16 +107,29 @@ export default function Suggests() {
 
           setIsInserting(true);
 
-          const events = watch().suggestedActivities.map((activity: any) => ({
-            summary: activity.activity,
-            description: activity.description,
-            start: {
-              dateTime: activity.startTime.toISO(),
-            },
-            end: {
-              dateTime: activity.endTime.toISO(),
-            },
-          }));
+          const events = await Promise.all(
+            watch().suggestedActivities.map(async (activity: any) => {
+              const dates = await convertedDates(
+                activity.startTime,
+                activity.endTime
+              );
+
+              console.log(dates);
+
+              if (dates) {
+                return {
+                  summary: activity.activity,
+                  description: activity.description,
+                  start: {
+                    dateTime: dates.start,
+                  },
+                  end: {
+                    dateTime: dates.end,
+                  },
+                };
+              }
+            })
+          );
 
           let isAllInserted = true;
 
@@ -177,9 +219,14 @@ export default function Suggests() {
         </Dropdown>
       </div>
 
+      {dates.map((date) => (
+        <h1 key={date} className="text-2xl font-semibold text-white">
+          Date: {DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
+        </h1>
+      ))}
       <div className="bg-[#2a2c30] rounded-2xl mt-6 p-4 h-full">
         <div className="grid grid-cols-4 gap-4">
-          {suggested.map((_, index) => (
+          {suggested?.map((_, index) => (
             <FormItem
               register={register}
               control={control}

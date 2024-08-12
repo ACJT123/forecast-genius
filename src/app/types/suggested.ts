@@ -5,4 +5,4 @@ export type ISuggested = {
   startTime: DateTime;
   endTime: DateTime;
   description: string;
-}[];
+};

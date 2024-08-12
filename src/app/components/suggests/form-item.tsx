@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import Image from "next/image";
 import TimePicker from "./time-picker";
 import { Controller } from "react-hook-form";
+import { convertToUTC } from "@/app/util/date";
 
 type IFormItem = {
   register: any;
@@ -61,7 +62,7 @@ export default function FormItem({ register, control, id }: IFormItem) {
             return (
               <TimePicker
                 onChange={onChange}
-                value={value}
+                value={convertToUTC(value)}
                 className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
                 format={"t"}
               />
@@ -76,7 +77,7 @@ export default function FormItem({ register, control, id }: IFormItem) {
             return (
               <TimePicker
                 onChange={onChange}
-                value={value}
+                value={convertToUTC(value)}
                 className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
                 format={"t"}
               />

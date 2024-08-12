@@ -1,10 +1,11 @@
 import { ISuggested } from "@/app/types/suggested";
+import { convertToUTC } from "@/app/util/date";
 import { Table } from "antd";
 import { DateTime } from "luxon";
 import { Margin, usePDF } from "react-to-pdf";
 
 type IDownloadSuggestionModal = {
-  suggestions: ISuggested;
+  suggestions: ISuggested[];
 };
 
 export default function DownloadSuggestionModal({
@@ -17,9 +18,15 @@ export default function DownloadSuggestionModal({
     },
   });
 
-  const date = suggestions[0].startTime.toFormat("yyyy-MM-dd");
+  const f = suggestions.map((suggestion) => ({
+    ...suggestion,
+    startTime: convertToUTC(suggestion.startTime.toString()),
+    endTime: convertToUTC(suggestion.endTime.toString()),
+  }));
 
-  const suggestionsData = suggestions
+  const date = f[0].startTime.toFormat("yyyy-MM-dd");
+
+  const suggestionsData = f
     .sort((a, b) => a.startTime.toMillis() - b.startTime.toMillis())
     .map((suggestion) => ({
       ...suggestion,
