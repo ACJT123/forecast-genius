@@ -5,7 +5,7 @@ export const convertToUTC = (date: string) => {
   return DateTime.fromISO(date, { zone: "utc" });
 };
 
-export const changeTimeZones = async (time: string) => {
+export const changeTimeZones = async (time: string, keep?: boolean) => {
   // set coordinates from local storage
   const cor = localStorage.getItem("cor")?.split(",");
 
@@ -21,8 +21,14 @@ export const changeTimeZones = async (time: string) => {
 
     if (timeZone) {
       return convertToUTC(time)
-        .setZone(timeZone, { keepLocalTime: true }) // prevent changing the time
+        .setZone(timeZone, { keepLocalTime: keep }) // prevent changing the time
         .toString();
     }
   }
+};
+
+export const convertTo12Hour = (value: number) => {
+  return DateTime.fromObject({
+    hour: value,
+  }).toFormat("h a");
 };
