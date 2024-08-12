@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import Image from "next/image";
 import TimePicker from "./time-picker";
 import { Controller } from "react-hook-form";
+import { convertToUTC } from "@/app/util/date";
 
 type IFormItem = {
   register: any;
@@ -56,13 +57,28 @@ export default function FormItem({ register, control, id }: IFormItem) {
 
         <Controller
           control={control}
-          name={`suggestedActivities.${id}.time`}
+          name={`suggestedActivities.${id}.startTime`}
           render={({ field: { onChange, onBlur, value, ref } }) => {
             return (
               <TimePicker
                 onChange={onChange}
-                value={value}
-                className="w-full bg-[#2a2c30] text-white p-2 rounded-lg my-4"
+                value={convertToUTC(value)}
+                className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
+                format={"t"}
+              />
+            );
+          }}
+        />
+
+        <Controller
+          control={control}
+          name={`suggestedActivities.${id}.endTime`}
+          render={({ field: { onChange, onBlur, value, ref } }) => {
+            return (
+              <TimePicker
+                onChange={onChange}
+                value={convertToUTC(value)}
+                className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
                 format={"t"}
               />
             );
@@ -72,7 +88,7 @@ export default function FormItem({ register, control, id }: IFormItem) {
         <textarea
           {...register(`suggestedActivities.${id}.description`)}
           placeholder="Description"
-          className="w-full bg-[#2a2c30] text-white p-2 rounded-lg"
+          className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
         />
       </div>
     </div>

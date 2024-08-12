@@ -15,73 +15,13 @@ import "./style.scss";
 
 export default function Weather() {
   const [openSearch, setOpenSearch] = useState(false);
-  const [locationSearch, setLocationSearch] = useState<string>(
-    encodeURI("Kuala Lumpur")
-  );
+  const { weatherData, isLoading, setLocationSearch } = useWeather();
 
-  useEffect(() => {
-    // get location from local storage
-    const savedLocation = localStorage.getItem("location")?.split(",");
-    if (savedLocation) {
-      for (const v of savedLocation) {
-        if (v !== "") {
-          setLocationSearch(encodeURI(v));
-          break;
-        }
-      }
-    }
-  }, [locationSearch]);
-
-  const { data, isLoading, error, mutate } = useSWR(
-    // `https://api.tomorrow.io/v4/weather/realtime?location=${locationSearch}` +
-      API_KEY,
-    getData,
-    {
-      errorRetryInterval: 10000,
-    }
-  );
-
-  const mockData = {
-    data: {
-      time: "2023-01-26T07:48:00Z",
-      values: {
-        cloudBase: 0.07,
-        cloudCeiling: 0.07,
-        cloudCover: 100,
-        dewPoint: 0.88,
-        freezingRainIntensity: 0,
-        humidity: 96,
-        precipitationProbability: 0,
-        pressureSurfaceLevel: 984.57,
-        rainIntensity: 0,
-        sleetIntensity: 0,
-        snowIntensity: 0,
-        temperature: 1.88,
-        temperatureApparent: -0.69,
-        uvHealthConcern: 0,
-        uvIndex: 0,
-        visibility: 9.9,
-        weatherCode: 1001,
-        windDirection: 10,
-        windGust: 3.38,
-        windSpeed: 2.38,
-      },
-    },
-    location: {
-      lat: 43.653480529785156,
-      lon: -79.3839340209961,
-      name: "Old Toronto, Toronto, Golden Horseshoe, Ontario, Canada",
-      type: "administrative",
-    },
-  };
-
-  const weatherData = data?.data || mockData.data;
-
-  const temp = weatherData?.values.temperature;
-  const location = data?.location.name || mockData.location.name;
-  const time = weatherData?.time;
-  const code = weatherData?.values.weatherCode;
-  const weatherValues = weatherData?.values;
+  const temp = weatherData?.data.values.temperature;
+  const location = weatherData?.location.name;
+  const time = weatherData?.data.time;
+  const code = weatherData?.data.values.weatherCode;
+  const weatherValues = weatherData?.data.values;
 
   return (
     <main className="bg-[#2a2c30] rounded-2xl p-8 h-full">

@@ -6,13 +6,13 @@ import Suggests from "./components/suggests/suggests";
 
 export default function Home() {
   return (
-    // <WeatherProvider>
-    <main className="4xs:flex 4xs:flex-col 4xs:items-center md:items-start md:flex-none md:grid md:grid-col-1 xl:grid-cols-3 gap-8 p-4">
+    <WeatherProvider>
+      <main className="4xs:flex 4xs:flex-col 4xs:items-center md:items-start md:flex-none md:grid md:grid-col-1 xl:grid-cols-3 gap-8 p-4">
         <Weather />
         <TodayHighlight />
         <Forecast />
         <Suggests />
-    </main>
-    // </WeatherProvider>
+      </main>
+    </WeatherProvider>
   );
 }
