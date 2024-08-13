@@ -6,6 +6,22 @@ export const convertToUTC = (date: string) => {
 };
 
 export const changeTimeZones = async (time: string, keep?: boolean) => {
+  const timeZone = await getTimeZone();
+
+  if (timeZone) {
+    return convertToUTC(time)
+      .setZone(timeZone, { keepLocalTime: keep }) // prevent changing the time
+      .toString();
+  }
+};
+
+export const convertTo12Hour = (value: number) => {
+  return DateTime.fromObject({
+    hour: value,
+  }).toFormat("h a");
+};
+
+export const getTimeZone = async () => {
   // set coordinates from local storage
   const cor = localStorage.getItem("cor")?.split(",");
 
@@ -19,16 +35,8 @@ export const changeTimeZones = async (time: string, keep?: boolean) => {
 
     const timeZone = result?.results[0].timezone.name;
 
-    if (timeZone) {
-      return convertToUTC(time)
-        .setZone(timeZone, { keepLocalTime: keep }) // prevent changing the time
-        .toString();
-    }
-  }
-};
+    console.log("Timezone:", timeZone);
 
-export const convertTo12Hour = (value: number) => {
-  return DateTime.fromObject({
-    hour: value,
-  }).toFormat("h a");
+    return timeZone;
+  }
 };

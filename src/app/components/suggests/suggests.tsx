@@ -14,6 +14,7 @@ import suggestedActivitySchema from "@/app/schema/suggested";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useWeather } from "@/app/context/WeatherContext";
 import { changeTimeZones } from "@/app/util/date";
+import Calendar from "./calendar";
 
 declare const window: any;
 
@@ -225,7 +226,7 @@ export default function Suggests() {
         </h1>
       ))}
 
-      <div className="bg-[#2a2c30] rounded-2xl mt-6 p-4 h-full">
+      {/* <div className="bg-[#2a2c30] rounded-2xl mt-6 p-4 h-full">
         <div className="grid grid-cols-3 gap-4">
           {suggested?.map((_, index) => (
             <FormItem
@@ -236,8 +237,8 @@ export default function Suggests() {
             />
           ))}
         </div>
-      </div>
-
+      </div> */}
+      <Calendar activities={suggested} />
       {contextHolder}
     </main>
   );

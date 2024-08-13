@@ -1,0 +1,19 @@
+.rbc-day-slot {
+  @apply bg-transparent;
+}
+
+.rbc-row {
+  @apply bg-[#2a2c30] border-none;
+}
+
+.rbc-toolbar {
+  button {
+    @apply text-white;
+  }
+}
+
+.rbc-timeslot-group {
+  .rbc-time-slot:nth-child(2) {
+    @apply border-t-0;
+  }
+}
