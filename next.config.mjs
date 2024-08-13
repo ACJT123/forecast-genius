@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: false,
   transpilePackages: ["@mui/x-charts"],
   images: {
     domains: ["img.icons8.com", "img.freepik.com"],
