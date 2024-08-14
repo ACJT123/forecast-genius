@@ -1,69 +1,97 @@
+"use client";
+
 import { useWeather } from "@/app/context/WeatherContext";
 import Card from "./card";
-import { data } from "@/app/data";
-import { DateTime } from "luxon";
-import GaugeComponent from "react-gauge-component";
-import { convertTo12Hour, convertToUTC } from "@/app/util/date";
+import { convertTo12Hour } from "@/app/util/date";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Spin } from "antd";
 
 export default function SunriseSunset() {
   const { forecastData } = useWeather();
 
-  const data = forecastData?.forecastData.timelines.daily[0].values;
+  const [data, setData] = useState<any>(null);
 
-  console.log(data?.sunriseTime, data?.sunsetTime);
+  useEffect(() => {
+    const convert = async () => {
+      const data = forecastData?.forecastData.timelines.daily[0].values;
 
-  let sunrise = DateTime.fromISO(data?.sunriseTime, { zone: "Asia/Singapore" });
-  let sunset = DateTime.fromISO(data?.sunsetTime, { zone: "Asia/Singapore" });
+      if (!data) return;
 
-  console.log(sunrise.hour, sunset.hour);
+      const sunrise = await convertTo12Hour(data?.sunriseTime);
+      const sunset = await convertTo12Hour(data?.sunsetTime);
+      const moonrise = await convertTo12Hour(data?.moonriseTime);
+      const moonset = await convertTo12Hour(data?.moonsetTime);
+
+      setData({ sunrise, sunset, moonrise, moonset });
+    };
+
+    convert();
+  }, [forecastData]);
 
   return (
-    <>
-      {data && (
-        <Card>
-          <div>Sunrise & Sunset</div>
+    <Card>
+      {data ? (
+        <>
+          <div className="grid grid-cols-2 justify-items-center text-center">
+            <div>
+              <h1 className="text-lg">Sunrise</h1>
 
-          <GaugeComponent
-            className="sunrise-sunset"
-            arc={{
-              gradient: true,
-              padding: 0.01,
-              width: 0.05,
-              subArcs: [
-                {
-                  limit: 0,
-                  color: "#FFC62D",
-                },
-                {
-                  limit: 24 ,
-                  color: "#FF8157",
-                },
-              ],
-            }}
-            pointer={{ type: "blob", animationDelay: 0, width: 15 }}
-            labels={{
-              valueLabel: {
-                formatTextValue: (value) => convertTo12Hour(value),
-              },
-              tickLabels: {
-                type: "inner",
-                defaultTickValueConfig: {
-                  formatTextValue: (value) => convertTo12Hour(value),
-                },
-              },
-            }}
-            value={DateTime.now().hour}
-            type="semicircle"
-            minValue={0}
-            maxValue={24}
-          />
+              <Image
+                width="80"
+                height="80"
+                src="https://img.icons8.com/fluency/96/sunrise.png"
+                alt="sunrise"
+              />
 
-          <div className="flex items-center justify-between px-[50px]">
-            <div>Sunrise</div>
-            <div>Sunset</div>
+              <h2>{data?.sunrise}</h2>
+            </div>
+
+            <div>
+              <h1 className="text-lg">Sunset</h1>
+
+              <Image
+                width="80"
+                height="80"
+                src="https://img.icons8.com/fluency/96/sunset.png"
+                alt="sunset"
+              />
+
+              <h2>{data?.sunset}</h2>
+            </div>
           </div>
-        </Card>
+
+          <div className="grid grid-cols-2 justify-items-center text-center mt-8">
+            <div>
+              <h1 className="text-lg">Moonrise</h1>
+
+              <Image
+                width="80"
+                height="80"
+                src="https://img.icons8.com/fluency/96/moonrise.png"
+                alt="moonrise"
+              />
+
+              <h2>{data?.moonrise}</h2>
+            </div>
+
+            <div>
+              <h1 className="text-lg">Moonset</h1>
+
+              <Image
+                width="80"
+                height="80"
+                src="https://img.icons8.com/fluency/96/moonset.png"
+                alt="moonset"
+              />
+
+              <h2>{data?.moonset}</h2>
+            </div>
+          </div>
+        </>
+      ) : (
+        <Spin />
       )}
-    </>
+    </Card>
   );
 }

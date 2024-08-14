@@ -15,10 +15,12 @@ export const changeTimeZones = async (time: string, keep?: boolean) => {
   }
 };
 
-export const convertTo12Hour = (value: number) => {
-  return DateTime.fromObject({
-    hour: value,
-  }).toFormat("h a");
+export const convertTo12Hour = async (value: string) => {
+  const tz = await getTimeZone();
+
+  return DateTime.fromISO(value, {
+    zone: tz,
+  }).toFormat("hh:mm a");
 };
 
 export const getTimeZone = async () => {
