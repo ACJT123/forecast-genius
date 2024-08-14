@@ -1,17 +1,12 @@
 "use client";
 
-import { suggestedActivity } from "@/app/data";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
-import FormItem from "./form-item";
-import { set, useForm } from "react-hook-form";
 import { Dropdown, Modal, Spin } from "antd";
 import Image from "next/image";
 import DownloadSuggestionModal from "./download-suggestion-modal";
 import { menu } from "@/app/models/suggests";
 import { ISuggested } from "@/app/types/suggested";
-import suggestedActivitySchema from "@/app/schema/suggested";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useWeather } from "@/app/context/WeatherContext";
 import { changeTimeZones } from "@/app/util/date";
 import Calendar from "./calendar";
@@ -24,39 +19,15 @@ export default function Suggests() {
   const { forecastData } = useWeather();
 
   const [suggested, setSuggested] = useState<ISuggested[]>([]);
-  const [dates, setDates] = useState<any[]>([]);
+  const [editedEvent, setEditedEvent] = useState<any>();
 
   useEffect(() => {
     if (forecastData) {
       const activities = forecastData?.suggestions;
 
-      // activities?.forEach((activity: any) => {
-      //   const startTimeISO = DateTime.fromISO(activity.startTime)?.toISO();
-      //   const endTimeISO = DateTime.fromISO(activity.endTime)?.toISO();
-
-      //   // Check if either startTime or endTime is already in the dates array
-      //   if (!dates.includes(startTimeISO) && !dates.includes(endTimeISO)) {
-      //     const a = dates.push(startTimeISO);
-
-      //     setDates(a);
-      //   }
-      // });
-
-      // console.log(dates);
       setSuggested(activities || []);
     }
-  }, [forecastData, dates]);
-
-  const { register, watch, control, setValue } = useForm<{
-    suggestedActivities: ISuggested[];
-  }>();
-
-  // Set the form values once suggested activities are available
-  useEffect(() => {
-    if (suggested.length > 0) {
-      setValue("suggestedActivities", suggested);
-    }
-  }, [suggested, setValue]);
+  }, [forecastData]);
 
   const downloadSuggestionModal = () => {
     if (suggested.length === 0) return;
@@ -64,18 +35,27 @@ export default function Suggests() {
     modal.info({
       icon: null,
       width: 800,
-      content: (
-        <DownloadSuggestionModal suggestions={watch().suggestedActivities} />
-      ),
+      content: <DownloadSuggestionModal suggestions={formattedEditedEvent()} />,
       centered: true,
       footer: null,
       closable: true,
     });
   };
 
+  const formattedEditedEvent = () => {
+    return editedEvent?.map((activity: any) => {
+      return {
+        activity: activity.title,
+        startTime: DateTime.fromISO(activity.start.toISOString()),
+        endTime: DateTime.fromISO(activity.end.toISOString()),
+        description: activity.description,
+      };
+    });
+  };
+
   const convertedDates = async (start: string, end: string) => {
-    const s = await changeTimeZones(start);
-    const e = await changeTimeZones(end);
+    const s = await changeTimeZones(start, true);
+    const e = await changeTimeZones(end, true);
 
     return { start: s, end: e };
   };
@@ -109,13 +89,11 @@ export default function Suggests() {
           setIsInserting(true);
 
           const events = await Promise.all(
-            watch().suggestedActivities.map(async (activity: any) => {
+            formattedEditedEvent()?.map(async (activity: any) => {
               const dates = await convertedDates(
                 activity.startTime,
                 activity.endTime
               );
-
-              console.log(dates);
 
               if (dates) {
                 return {
@@ -178,6 +156,8 @@ export default function Suggests() {
     window.gapi.load("client", initializeGapiClient);
   };
 
+  const refresh = async () => {};
+
   const handleChange = (value: any) => {
     const { key } = value;
 
@@ -189,7 +169,7 @@ export default function Suggests() {
         insertToGoogleCalendar();
         break;
       default:
-        console.log("Refresh");
+        refresh();
         break;
     }
   };
@@ -220,25 +200,13 @@ export default function Suggests() {
         </Dropdown>
       </div>
 
-      {dates.map((date) => (
-        <h1 key={date} className="text-2xl font-semibold text-white">
-          Date: {DateTime.fromISO(date).toFormat("yyyy-MM-dd")}
-        </h1>
-      ))}
+      <Calendar
+        activities={suggested}
+        ev={(events: any) => {
+          setEditedEvent(events);
+        }}
+      />
 
-      {/* <div className="bg-[#2a2c30] rounded-2xl mt-6 p-4 h-full">
-        <div className="grid grid-cols-3 gap-4">
-          {suggested?.map((_, index) => (
-            <FormItem
-              register={register}
-              control={control}
-              key={index}
-              id={index}
-            />
-          ))}
-        </div>
-      </div> */}
-      <Calendar activities={suggested} />
       {contextHolder}
     </main>
   );
