@@ -1,5 +1,14 @@
 import { ReactNode } from "react";
 
-export default function Card({ children }: { children: ReactNode }) {
-  return <div className="bg-[#132028]/70 rounded-2xl p-4">{children}</div>;
+type ICard = {
+  children: ReactNode;
+  className?: string;
+};
+
+export default function Card({ className, children }: ICard) {
+  return (
+    <div className={`bg-[#132028]/70 rounded-2xl p-4 ${className}`}>
+      {children}
+    </div>
+  );
 }
