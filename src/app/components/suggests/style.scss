@@ -17,3 +17,11 @@
     @apply border-t-0;
   }
 }
+.rbc-btn-group,
+.rbc-current-time-indicator {
+  @apply hidden;
+}
+
+.rbc-time-view {
+  @apply rounded-md;
+}
