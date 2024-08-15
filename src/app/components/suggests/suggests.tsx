@@ -200,12 +200,12 @@ export default function Suggests() {
         </Dropdown>
       </div>
 
-      <Calendar
-        activities={suggested}
-        ev={(events: any) => {
-          setEditedEvent(events);
-        }}
-      />
+        <Calendar
+          activities={suggested}
+          ev={(events: any) => {
+            setEditedEvent(events);
+          }}
+        />
 
       {contextHolder}
     </main>
