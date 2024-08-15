@@ -6,10 +6,12 @@ import { useWeather } from "@/app/context/WeatherContext";
 
 // feels like = temperature apparent
 export default function FeelsLike() {
-  const { forecastData } = useWeather();
+  const { todayHighlight } = useWeather();
 
-  const tempApp =
-    forecastData?.forecastData.timelines.daily[0].values.temperatureApparentAvg;
+  if (!todayHighlight) return;
+
+  const { value, msg } = todayHighlight?.feelsLike;
+
 
   return (
     <CardSm>
@@ -17,7 +19,7 @@ export default function FeelsLike() {
 
       <div className="flex items-center justify-between">
         <div>
-          <span className="text-3xl">{tempApp}</span>
+          <span className="text-3xl">{value}</span>
 
           <span className="text-xs opacity-50">
             <sup>°</sup> C
@@ -32,7 +34,7 @@ export default function FeelsLike() {
             alt="thermometer"
           />
 
-          <p className="max-w-[180px]">{feelsLikeMessage(tempApp)}</p>
+          <p className="max-w-[180px]">{msg}</p>
         </div>
       </div>
     </CardSm>

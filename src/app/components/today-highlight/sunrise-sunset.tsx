@@ -1,39 +1,41 @@
 "use client";
 
 import { useWeather } from "@/app/context/WeatherContext";
-import Card from "./card";
 import { convertTo12Hour } from "@/app/util/date";
+import { Spin } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Spin } from "antd";
+import Card from "./card";
 
 export default function SunriseSunset() {
-  const { forecastData } = useWeather();
+  const { todayHighlight } = useWeather();
 
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     const convert = async () => {
-      const data = forecastData?.forecastData.timelines.daily[0].values;
+      const data = todayHighlight?.riseAndSet;
 
       if (!data) return;
 
-      const sunrise = await convertTo12Hour(data?.sunriseTime);
-      const sunset = await convertTo12Hour(data?.sunsetTime);
-      const moonrise = await convertTo12Hour(data?.moonriseTime);
-      const moonset = await convertTo12Hour(data?.moonsetTime);
+      const sunrise = await convertTo12Hour(data?.sunrise);
+      const sunset = await convertTo12Hour(data?.sunset);
+      const moonrise = await convertTo12Hour(data?.moonrise);
+      const moonset = await convertTo12Hour(data?.moonset);
 
       setData({ sunrise, sunset, moonrise, moonset });
     };
 
     convert();
-  }, [forecastData]);
+  }, [todayHighlight]);
 
   return (
-    <Card>
+    <Card className="">
       {data ? (
         <>
-          <div className="grid grid-cols-2 justify-items-center text-center">
+          <div>Rise and Set</div>
+
+          <div className="grid grid-cols-2 justify-items-center text-center gap-x-[30px] mt-8">
             <div>
               <h1 className="text-lg">Sunrise</h1>
 
@@ -61,7 +63,7 @@ export default function SunriseSunset() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 justify-items-center text-center mt-8">
+          <div className="grid grid-cols-2 justify-items-center text-center mt-8 gap-x-[30px]">
             <div>
               <h1 className="text-lg">Moonrise</h1>
 

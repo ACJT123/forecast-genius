@@ -5,10 +5,11 @@ import { visibilityMessage } from "@/app/models/visibility";
 import { useWeather } from "@/app/context/WeatherContext";
 
 export default function Visibility() {
-  const { forecastData } = useWeather();
+  const { todayHighlight } = useWeather();
 
-  const visibility =
-    forecastData?.forecastData.timelines.daily[0].values.visibilityAvg;
+  if (!todayHighlight) return;
+
+  const { value, msg } = todayHighlight?.visibility;
 
   return (
     <CardSm>
@@ -16,7 +17,7 @@ export default function Visibility() {
 
       <div className="flex items-center justify-between">
         <div>
-          <span className="text-3xl">{visibility}</span>
+          <span className="text-3xl">{value}</span>
 
           <span className="text-xs opacity-50">&nbsp;km</span>
         </div>
@@ -29,7 +30,7 @@ export default function Visibility() {
             alt="invisible"
           />
 
-          <p className="max-w-[180px]">{visibilityMessage(visibility)}</p>
+          <p className="max-w-[180px]">{msg}</p>
         </div>
       </div>
     </CardSm>

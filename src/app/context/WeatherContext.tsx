@@ -13,6 +13,7 @@ import { getData } from "../util/http"; // Import your additional data fetching 
 interface WeatherContextType {
   weatherData: any;
   forecastData: any; // Add another property for additional data
+  todayHighlight: any;
   isLoading: boolean;
   savedLocation: string;
   setLocationSearch: (location: string) => void;
@@ -21,6 +22,7 @@ interface WeatherContextType {
 const WeatherContext = createContext<WeatherContextType>({
   weatherData: null,
   forecastData: null,
+  todayHighlight: null,
   isLoading: true,
   savedLocation: "",
   setLocationSearch: () => {},
@@ -99,6 +101,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
       value={{
         weatherData: weatherData,
         forecastData: forecastData,
+        todayHighlight: forecastData?.todayHightlight,
         isLoading,
         savedLocation: locationSearch || "",
         setLocationSearch,
