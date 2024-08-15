@@ -9,6 +9,7 @@ import {
 } from "react";
 import useSWR from "swr";
 import { getData } from "../util/http"; // Import your additional data fetching function
+import { Spin } from "antd";
 
 interface WeatherContextType {
   weatherData: any;
@@ -95,6 +96,10 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
       );
     }
   }, [weatherData]);
+
+  if (isLoading) {
+    return <Spin fullscreen tip="Loading..." />;
+  }
 
   return (
     <WeatherContext.Provider
