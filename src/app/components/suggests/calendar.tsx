@@ -12,6 +12,7 @@ import { Controller, FieldError, useForm } from "react-hook-form";
 import { convertToUTC } from "@/app/util/date";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import EditForm from "./edit-form";
 
 type ICalendar = {
   activities?: any;
@@ -83,6 +84,7 @@ export default function Calendar({ activities, ev }: ICalendar) {
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<{
     suggestedActivities: {
@@ -228,69 +230,23 @@ export default function Calendar({ activities, ev }: ICalendar) {
       icon: null,
       width: 800,
       content: (
-        <form onSubmit={handleSubmit((data) => onSubmit(data, event))}>
-          <h1 className="text-xl mb-4">Update Event</h1>
-
-          <input
-            {...register(`suggestedActivities.${event.id}.activity`)}
-            defaultValue={event.title}
-            type="text"
-            placeholder="Activity"
-            className="w-full bg-[#2a2c30] text-white p-2 rounded-lg"
-          />
-
-          <div id="activityError"></div>
-
-          <textarea
-            {...register(`suggestedActivities.${event.id}.description`)}
-            defaultValue={activities[event.id]?.description}
-            placeholder="Description"
-            className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
-          />
-
-          <div id="descriptionError"></div>
-
-          <Controller
-            control={control}
-            name={`suggestedActivities.${event.id}.startTime`}
-            render={({ field: { onChange, value } }) => (
-              <TimePicker
-                onChange={onChange}
-                value={convertToUTC(value)}
-                className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
-                format={"t"}
-              />
-            )}
-          />
-
-          <div id="startTimeError"></div>
-
-          <Controller
-            control={control}
-            name={`suggestedActivities.${event.id}.endTime`}
-            render={({ field: { onChange, value } }) => (
-              <TimePicker
-                onChange={onChange}
-                value={convertToUTC(value)}
-                className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
-                format={"t"}
-              />
-            )}
-          />
-
-          <div id="endTimeError"></div>
-
-          <button
-            type="submit"
-            className="bg-blue-500 text-white p-2 rounded-lg mt-4"
-          >
-            Update
-          </button>
-        </form>
+        <EditForm
+          register={register}
+          control={control}
+          event={event}
+          activities={activities}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+        />
       ),
       centered: true,
       footer: null,
       closable: true,
+      onCancel: () => {
+        reset({
+          suggestedActivities: activities,
+        });
+      },
     });
   };
 
