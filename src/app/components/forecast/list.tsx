@@ -126,7 +126,7 @@ export default function List({ selectedForecastType }: Ilist) {
   };
 
   return (
-    <div className="h-full max-h-[900px] overflow-scroll forecast-list flex flex-col gap-8">
+    <div className="h-full max-h-[400px] overflow-scroll forecast-list flex flex-col gap-8">
       {renderData()}
     </div>
   );
