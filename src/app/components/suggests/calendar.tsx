@@ -8,13 +8,62 @@ import { useCallback, useEffect, useState } from "react";
 import "moment-timezone";
 import { Modal } from "antd";
 import TimePicker from "./time-picker";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, FieldError, useForm } from "react-hook-form";
 import { convertToUTC } from "@/app/util/date";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 type ICalendar = {
   activities?: any;
   ev: (event: any) => void;
 };
+
+const schema = yup.object().shape({
+  suggestedActivities: yup
+    .array()
+    .of(
+      yup.object().shape({
+        activity: yup.string().required("Activity Name is required"),
+
+        description: yup.string().required("Description is required"),
+
+        startTime: yup
+          .string()
+          .required("Start time is required") // always lesss than end time
+          .test(
+            "is-greater",
+            "Start time must be less than end time",
+            function (value) {
+              const endTime = this.parent.endTime;
+
+              if (value && endTime) {
+                return moment(value).isBefore(endTime);
+              }
+
+              return true;
+            }
+          ),
+
+        endTime: yup
+          .string()
+          .required("End time is required")
+          .test(
+            "is-greater",
+            "End time must be greater than start time",
+            function (value) {
+              const startTime = this.parent.startTime;
+
+              if (value && startTime) {
+                return moment(value).isAfter(startTime);
+              }
+
+              return true;
+            }
+          ),
+      })
+    )
+    .default([]),
+});
 
 export default function Calendar({ activities, ev }: ICalendar) {
   const [modal, contextHolder] = Modal.useModal();
@@ -27,24 +76,41 @@ export default function Calendar({ activities, ev }: ICalendar) {
 
   const [events, setEvents] = useState<any[]>([]);
 
-  const { register, handleSubmit, control, setValue } = useForm<{
-    suggestedActivities: any[];
+  const [currentId, setCurrentId] = useState<number>(0);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<{
+    suggestedActivities: {
+      activity: string;
+      description: string;
+      startTime: string;
+      endTime: string;
+    }[];
   }>({
     defaultValues: {
       suggestedActivities: [],
     },
+    resolver: yupResolver(schema),
   });
 
+  // component callback
   useEffect(() => {
     ev(events);
   }, [ev, events]);
 
+  // set the default values
   useEffect(() => {
     if (activities.length > 0) {
       setValue("suggestedActivities", activities);
     }
   }, [activities, setValue]);
 
+  // reformat the events to be displayed on the react big calendar
   useEffect(() => {
     const events = activities?.map((activity: any, index: number) => ({
       id: index,
@@ -57,6 +123,26 @@ export default function Calendar({ activities, ev }: ICalendar) {
     setEvents(events);
   }, [activities]);
 
+  // display the errors
+  useEffect(() => {
+    const fieldIds = [
+      "activity",
+      "description",
+      "startTime",
+      "endTime",
+    ] as const; // as const is to make it readonly
+
+    fieldIds.forEach((fieldId) => {
+      const error = errors.suggestedActivities?.[currentId]?.[fieldId];
+      const div = document.getElementById(`${fieldId}Error`);
+
+      if (div && error?.message) {
+        div.classList.add("text-red-500");
+        div.textContent = error.message;
+      }
+    });
+  }, [errors, currentId]);
+
   const moveEvent = useCallback(
     ({ event, start, end }: { event: any; start: any; end: any }) => {
       setEvents((prev: any) => {
@@ -67,12 +153,12 @@ export default function Calendar({ activities, ev }: ICalendar) {
 
       setValue(
         `suggestedActivities.${event.id}.startTime`,
-        convertToUTC(start.toISOString())
+        convertToUTC(start.toISOString()).toString()
       );
 
       setValue(
         `suggestedActivities.${event.id}.endTime`,
-        convertToUTC(end.toISOString())
+        convertToUTC(end.toISOString()).toString()
       );
     },
     [setEvents, setValue]
@@ -88,12 +174,12 @@ export default function Calendar({ activities, ev }: ICalendar) {
 
       setValue(
         `suggestedActivities.${event.id}.startTime`,
-        convertToUTC(start.toISOString())
+        convertToUTC(start.toISOString()).toString()
       );
 
       setValue(
         `suggestedActivities.${event.id}.endTime`,
-        convertToUTC(end.toISOString())
+        convertToUTC(end.toISOString()).toString()
       );
     },
     [setEvents, setValue]
@@ -135,12 +221,15 @@ export default function Calendar({ activities, ev }: ICalendar) {
   };
 
   const editModal = (event: any) => {
+    // ensure the error messages are set to correct event
+    setCurrentId(event.id);
+
     modal.info({
       icon: null,
       width: 800,
       content: (
         <form onSubmit={handleSubmit((data) => onSubmit(data, event))}>
-          <h1>Update Event</h1>
+          <h1 className="text-xl mb-4">Update Event</h1>
 
           <input
             {...register(`suggestedActivities.${event.id}.activity`)}
@@ -150,12 +239,16 @@ export default function Calendar({ activities, ev }: ICalendar) {
             className="w-full bg-[#2a2c30] text-white p-2 rounded-lg"
           />
 
+          <div id="activityError"></div>
+
           <textarea
             {...register(`suggestedActivities.${event.id}.description`)}
             defaultValue={activities[event.id]?.description}
             placeholder="Description"
             className="w-full bg-[#2a2c30] text-white p-2 rounded-lg mt-4"
           />
+
+          <div id="descriptionError"></div>
 
           <Controller
             control={control}
@@ -170,6 +263,8 @@ export default function Calendar({ activities, ev }: ICalendar) {
             )}
           />
 
+          <div id="startTimeError"></div>
+
           <Controller
             control={control}
             name={`suggestedActivities.${event.id}.endTime`}
@@ -182,6 +277,8 @@ export default function Calendar({ activities, ev }: ICalendar) {
               />
             )}
           />
+
+          <div id="endTimeError"></div>
 
           <button
             type="submit"
