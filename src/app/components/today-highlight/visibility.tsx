@@ -12,10 +12,8 @@ export default function Visibility() {
   const { value, msg } = todayHighlight?.visibility;
 
   return (
-    <CardSm>
-      <div>Visibility</div>
-
-      <div className="flex items-center justify-between">
+    <CardSm title="Visibility">
+      <div className="flex items-center gap-8 justify-between">
         <div>
           <span className="text-3xl">{value}</span>
 
@@ -23,14 +21,14 @@ export default function Visibility() {
         </div>
 
         <div className="flex flex-col gap-2 opacity-50">
-          <Image
+          {/* <Image
             width="20"
             height="20"
             src="https://img.icons8.com/ios/100/FFFFFF/invisible.png"
             alt="invisible"
-          />
+          /> */}
 
-          <p className="max-w-[180px]">{msg}</p>
+          <p className="w-fit text-sm text-right">{msg}</p>
         </div>
       </div>
     </CardSm>

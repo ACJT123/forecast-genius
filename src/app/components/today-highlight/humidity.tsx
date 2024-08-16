@@ -11,10 +11,8 @@ export default function Humidity() {
   const { value, dewPoint } = todayHighlight?.humidity;
 
   return (
-    <CardSm>
-      <div>Humidity</div>
-
-      <div className="flex items-center justify-between">
+    <CardSm title="Humidity">
+      <div className="flex items-center gap-8">
         <div>
           <span className="text-3xl">{value}</span>
 
@@ -22,14 +20,14 @@ export default function Humidity() {
         </div>
 
         <div className="flex flex-col gap-2 opacity-50">
-          <Image
+          {/* <Image
             width="20"
             height="20"
             src="https://img.icons8.com/ios/100/FFFFFF/blur.png"
             alt="water"
-          />
+          /> */}
 
-          <p className="max-w-[200px]">
+          <p className="w-fit text-sm text-right">
             The dew point is {dewPoint}
             <sup>°</sup>C right now
           </p>

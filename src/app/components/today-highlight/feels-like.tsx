@@ -12,29 +12,24 @@ export default function FeelsLike() {
 
   const { value, msg } = todayHighlight?.feelsLike;
 
-
   return (
-    <CardSm>
-      <div>Feels Like</div>
-
-      <div className="flex items-center justify-between">
+    <CardSm title="Feels Like">
+      <div className="flex items-center gap-8">
         <div>
           <span className="text-3xl">{value}</span>
 
-          <span className="text-xs opacity-50">
-            <sup>°</sup> C
-          </span>
+          <span className="text-xs opacity-50">°C</span>
         </div>
 
         <div className="flex flex-col gap-2 opacity-50">
-          <Image
+          {/* <Image
             width="20"
             height="20"
             src="https://img.icons8.com/ios/100/FFFFFF/thermometer.png"
             alt="thermometer"
-          />
+          /> */}
 
-          <p className="max-w-[180px]">{msg}</p>
+          <p className="w-fit text-sm text-right">{msg}</p>
         </div>
       </div>
     </CardSm>
