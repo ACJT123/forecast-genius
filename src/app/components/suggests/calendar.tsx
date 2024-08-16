@@ -244,11 +244,6 @@ export default function Calendar({ activities, ev }: ICalendar) {
       footer: null,
       closable: true,
       closeIcon: <CloseOutlined style={{ color: "#fff" }} />,
-      onCancel: () => {
-        reset({
-          suggestedActivities: activities,
-        });
-      },
     });
   };
 

@@ -7,8 +7,8 @@ export const menu = [
     key: "2",
     label: "Insert to Google Calendar",
   },
-  {
-    key: "3",
-    label: "Refresh",
-  },
+  // {
+  //   key: "3",
+  //   label: "Refresh",
+  // },
 ];
