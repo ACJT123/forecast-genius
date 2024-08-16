@@ -53,10 +53,14 @@ export default function DownloadSuggestionModal({
     },
   ];
 
+  // add space after the all commas
+  const storedLocation = localStorage.getItem("location")?.replace(/,/g, ", ");
+
   return (
     <>
       <div ref={targetRef}>
         <h1>Date: {date}</h1>
+        {storedLocation && <h1>Location: {storedLocation}</h1>}
 
         <Table
           columns={columns}
