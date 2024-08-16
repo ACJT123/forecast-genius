@@ -3,6 +3,7 @@
 import Card from "./card";
 import { useWeather } from "@/app/context/WeatherContext";
 import { SparkLineChart } from "@mui/x-charts/SparkLineChart";
+import { createTheme, useTheme, ThemeProvider } from "@mui/material/styles";
 
 export default function WindStatus() {
   const { todayHighlight } = useWeather();
@@ -15,25 +16,29 @@ export default function WindStatus() {
 
   const { data, current, min, max, avg } = todayHighlight?.windStatus;
 
+  const newTheme = createTheme({ palette: { mode: "dark" } });
+
   return (
     <Card>
       <div className="flex flex-col items-center">
         <div className="text-start w-full">Wind Status</div>
 
-        <SparkLineChart
-          data={data.map((item: any) => item.value)}
-          width={280}
-          height={150}
-          curve="natural"
-          area
-          showHighlight
-          showTooltip
-          {...settings}
-          xAxis={{
-            scaleType: "band",
-            data: data.map((item: any) => item.time),
-          }}
-        />
+        <ThemeProvider theme={newTheme}>
+          <SparkLineChart
+            data={data.map((item: any) => item.value)}
+            width={280}
+            height={150}
+            curve="natural"
+            area
+            showHighlight
+            showTooltip
+            {...settings}
+            xAxis={{
+              scaleType: "band",
+              data: data.map((item: any) => item.time),
+            }}
+          />
+        </ThemeProvider>
 
         <div className="text-center mt-4">
           <span className="text-[40px]">{current.value}</span>

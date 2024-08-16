@@ -1,5 +1,16 @@
 import { ReactNode } from "react";
 
-export default function CardSm({ children }: { children: ReactNode }) {
-  return <div className="bg-[#111e25] rounded-2xl p-4">{children}</div>;
+type ICardSm = {
+  children: ReactNode;
+  title: string;
+};
+
+export default function CardSm({ children, title }: ICardSm) {
+  return (
+    <div className="bg-[#111e25] rounded-2xl p-4">
+      <div className="mb-4">{title}</div>
+
+      {children}
+    </div>
+  );
 }
