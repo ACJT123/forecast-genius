@@ -13,8 +13,10 @@ const TimePicker = React.forwardRef<any, TimePickerProps>((props, ref) => (
     theme={{
       components: {
         DatePicker: {
-          hoverBg: "none",
-          activeBg: "none",
+          colorText: "#fff",
+          colorBgElevated: "#303236",
+          colorTextPlaceholder: "#fff",
+          colorBgTextActive: "#303236",
         },
       },
     }}

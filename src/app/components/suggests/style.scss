@@ -25,3 +25,14 @@
 .rbc-time-view {
   @apply rounded-md;
 }
+
+.ant-picker-suffix,
+.ant-picker-clear {
+  @apply text-white #{!important};
+}
+
+.ant-picker-time-panel-cell-selected {
+  .ant-picker-time-panel-cell-inner {
+    @apply bg-[#fff]/40 #{!important};
+  }
+}

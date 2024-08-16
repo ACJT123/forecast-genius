@@ -24,7 +24,7 @@ export default function EditForm({
       <h1 className="text-xl mb-4">Update Event</h1>
 
       <div className="mt-4">
-        <label>Activity Name</label>
+        <div className="mb-2">Activity Name</div>
         <input
           {...register(`suggestedActivities.${event.id}.activity`)}
           defaultValue={event.title}
@@ -36,7 +36,7 @@ export default function EditForm({
       </div>
 
       <div className="mt-4">
-        <label>Description</label>
+        <div className="mb-2">Description</div>
         <textarea
           {...register(`suggestedActivities.${event.id}.description`)}
           defaultValue={activities[event.id]?.description}
@@ -47,7 +47,7 @@ export default function EditForm({
       </div>
 
       <div className="mt-4">
-        <label>Start Time</label>
+        <div className="mb-2">Start Time</div>
         <Controller
           control={control}
           name={`suggestedActivities.${event.id}.startTime`}
@@ -64,7 +64,7 @@ export default function EditForm({
       </div>
 
       <div className="mt-4">
-        <label>End Time</label>
+        <div className="mb-2">End Time</div>
         <Controller
           control={control}
           name={`suggestedActivities.${event.id}.endTime`}

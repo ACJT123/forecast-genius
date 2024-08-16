@@ -6,13 +6,14 @@ import "./style.scss";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import "moment-timezone";
-import { Modal } from "antd";
+import { ConfigProvider, Modal } from "antd";
 import TimePicker from "./time-picker";
 import { Controller, FieldError, useForm } from "react-hook-form";
 import { convertToUTC } from "@/app/util/date";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import EditForm from "./edit-form";
+import { CloseOutlined } from "@ant-design/icons";
 
 type ICalendar = {
   activities?: any;
@@ -139,7 +140,7 @@ export default function Calendar({ activities, ev }: ICalendar) {
       const div = document.getElementById(`${fieldId}Error`);
 
       if (div && error?.message) {
-        div.classList.add("text-red-500");
+        div.classList.add("text-red-400");
         div.textContent = error.message;
       }
     });
@@ -242,6 +243,7 @@ export default function Calendar({ activities, ev }: ICalendar) {
       centered: true,
       footer: null,
       closable: true,
+      closeIcon: <CloseOutlined style={{ color: "#fff" }} />,
       onCancel: () => {
         reset({
           suggestedActivities: activities,
@@ -251,20 +253,31 @@ export default function Calendar({ activities, ev }: ICalendar) {
   };
 
   return (
-    <div className="bg-[#2a2c30] p-4 rounded-lg mt-6 max-h-[400px] overflow-y-scroll">
-      <DnDCalendar
-        views={["day"]}
-        localizer={localizer}
-        events={events}
-        defaultDate={new Date()}
-        defaultView="day"
-        style={{ height: "100vh" }}
-        onEventDrop={moveEvent}
-        onEventResize={resizeEvent}
-        onSelectEvent={editModal}
-      />
-
-      {contextHolder}
-    </div>
+    <ConfigProvider
+      theme={{
+        components: {
+          Modal: {
+            contentBg: "#191b1f",
+            colorBgMask: "rgba(0, 0, 0, 0.8)",
+            colorText: "#fff",
+          },
+        },
+      }}
+    >
+      <div className="bg-[#2a2c30] p-4 rounded-lg mt-6 max-h-[400px] overflow-y-scroll">
+        <DnDCalendar
+          views={["day"]}
+          localizer={localizer}
+          events={events}
+          defaultDate={new Date()}
+          defaultView="day"
+          style={{ height: "100vh" }}
+          onEventDrop={moveEvent}
+          onEventResize={resizeEvent}
+          onSelectEvent={editModal}
+        />
+        {contextHolder}
+      </div>
+    </ConfigProvider>
   );
 }
