@@ -2,7 +2,7 @@
 
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
-import { Dropdown, Modal, Spin } from "antd";
+import { ConfigProvider, Dropdown, Modal, Spin } from "antd";
 import Image from "next/image";
 import DownloadSuggestionModal from "./download-suggestion-modal";
 import { menu } from "@/app/models/suggests";
@@ -183,29 +183,40 @@ export default function Suggests() {
           Based on today&apos;s weather, here are some suggested activities
         </h1>
 
-        <Dropdown
-          trigger={["click"]}
-          menu={{
-            items: menu,
-            onClick: handleChange,
+        <ConfigProvider
+          theme={{
+            components: {
+              Dropdown: {
+                colorBgElevated: "#191b1f",
+                colorText: "#fff",
+              },
+            },
           }}
         >
-          <Image
-            width="15"
-            height="15"
-            src="https://img.icons8.com/ios-filled/50/FFFFFF/menu-2.png"
-            alt="menu-2"
-            className="cursor-pointer"
-          />
-        </Dropdown>
+          <Dropdown
+            trigger={["click"]}
+            menu={{
+              items: menu,
+              onClick: handleChange,
+            }}
+          >
+            <Image
+              width="15"
+              height="15"
+              src="https://img.icons8.com/ios-filled/50/FFFFFF/menu-2.png"
+              alt="menu-2"
+              className="cursor-pointer"
+            />
+          </Dropdown>
+        </ConfigProvider>
       </div>
 
-        <Calendar
-          activities={suggested}
-          ev={(events: any) => {
-            setEditedEvent(events);
-          }}
-        />
+      <Calendar
+        activities={suggested}
+        ev={(events: any) => {
+          setEditedEvent(events);
+        }}
+      />
 
       {contextHolder}
     </main>
