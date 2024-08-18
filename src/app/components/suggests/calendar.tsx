@@ -259,7 +259,7 @@ export default function Calendar({ activities, ev }: ICalendar) {
         },
       }}
     >
-      <div className="bg-[#2a2c30] p-4 rounded-lg mt-6 max-h-[400px] overflow-y-scroll">
+      <div className="bg-[#2a2c30] p-4 rounded-2xl mt-6 max-h-[430px] overflow-y-scroll">
         <DnDCalendar
           views={["day"]}
           localizer={localizer}
