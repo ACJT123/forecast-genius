@@ -61,7 +61,7 @@ export default function Suggests() {
   };
 
   const insertToGoogleCalendar = () => {
-    const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+    const SCOPES = "https://www.googleapis.com/auth/calendar";
 
     const initializeGapiClient = async () => {
       await window.gapi.client.init({
