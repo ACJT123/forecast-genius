@@ -54,7 +54,11 @@ export default function DownloadSuggestionModal({
   ];
 
   // add space after the all commas
-  const storedLocation = localStorage.getItem("location")?.replace(/,/g, ", ");
+  const storedLocation = localStorage
+    .getItem("location")
+    ?.split(",")
+    .filter(Boolean)
+    .join(", ");
 
   return (
     <>
